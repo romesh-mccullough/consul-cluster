@@ -2,7 +2,6 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
-NUM_SERVERS = 3
 AUTO_JOIN = true
 
 # Default chef config
@@ -20,11 +19,11 @@ consul =
   }'
 
 # Define servers
-servers = []
-NUM_SERVERS.times do |i|
-  servers << { :hostname => "consul#{i}", :primary => false, :config => JSON.parse(consul) }
-end
-servers.first[:primary] = true
+servers = [
+  { :hostname => "consul0", :primary => true, :config => JSON.parse(consul) },
+  { :hostname => "consul1", :primary => false, :config => JSON.parse(consul) },
+  { :hostname => "consul2", :primary => false, :config => JSON.parse(consul) }
+]
 
 # Set dependent config
 servers.each do |server|
