@@ -1,0 +1,77 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+NUM_SERVERS = 3
+AUTO_JOIN = false
+
+# Default chef config
+consul = 
+  '{
+    "recipes": [
+      "consul"
+    ],
+    "json": {
+      "consul": {
+        "datacenter": "vagrant-dc",
+        "bind_interface": "eth1"
+      }
+    }
+  }'
+
+# Define servers
+servers = []
+NUM_SERVERS.times do |i|
+  servers << { :hostname => "consul#{i}", :primary => false, :config => JSON.parse(consul) }
+end
+servers.first[:primary] = true
+
+# Set dependent config
+servers.each do |server|
+  case server[:primary]
+  when true
+    server[:config]['json']['consul']['service_mode'] = "bootstrap"
+    server[:config]['json']['consul']['serve_ui'] = true
+    server[:config]['recipes'] << "consul::ui"
+  when false
+    server[:config]['json']['consul']['service_mode'] = "server"
+    server[:config]['json']['consul']['servers'] = ['consul0'] if AUTO_JOIN
+  end
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Setup hostmanager config to update the host files
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.vm.provision :hostmanager
+
+  # Forward our SSH Keys into the VM
+  config.ssh.forward_agent = true
+
+  # Enable Berkshelf plugin which will make cookbooks available to Vagrant
+  config.berkshelf.enabled = true
+
+  # Loop through all servers and configure them
+  servers.each do |server|
+    config.vm.define server[:hostname], primary: server[:primary] do |node_config|
+      node_config.vm.box = "ubuntu1204-chef1144"
+      node_config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/vmware/opscode_ubuntu-12.04_chef-provisionerless.box"
+      node_config.vm.hostname = server[:hostname]
+      node_config.vm.network :private_network, :auto_network => true
+      node_config.hostmanager.aliases = server[:hostname]
+
+      node_config.vm.provision :chef_solo do |chef|
+        chef.json = server[:config]['json']
+
+        server[:config]['recipes'].each do |recipe|
+          chef.add_recipe recipe
+        end
+      end
+    end
+  end
+
+end
+

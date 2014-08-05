@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/romeshmccullough/git/consul-cluster/vagrant","disabled":false},"v-csc-2":{"id":"v-csc-2","guestpath":"/tmp/vagrant-chef-4/chef-solo-1/cookbooks","hostpath":"/Users/romeshmccullough/.berkshelf/consul0/vagrant/berkshelf-20140805-65281-90zde6-consul1","disabled":false}}}
