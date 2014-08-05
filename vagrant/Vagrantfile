@@ -3,7 +3,7 @@
 
 VAGRANTFILE_API_VERSION = "2"
 NUM_SERVERS = 3
-AUTO_JOIN = false
+AUTO_JOIN = true
 
 # Default chef config
 consul = 
