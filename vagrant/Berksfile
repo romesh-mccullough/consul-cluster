@@ -3,4 +3,5 @@ source 'https://api.berkshelf.com'
 
 metadata
 
+# temporary until merged in to community cookbook
 cookbook 'consul', git: 'git@github.com:romesh-mccullough/consul-cookbook.git', branch: "set-bind-interface"
