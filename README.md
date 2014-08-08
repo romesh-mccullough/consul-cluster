@@ -30,15 +30,17 @@ consul join consul0
 exit
 ```
 
-Once the cluster has started you can access the web ui by going to http://consul0:8500/ui
+Once the cluster has started you can access the web ui by going to [http://consul0:8500/ui](http://consul0:8500/ui)
+
 
 ## Basic Usage
 
 Check out these guides for more detail:
-[http://www.consul.io/docs/guides/external.html][2]
-[http://www.consul.io/intro/getting-started/kv.html][3]
-[http://www.consul.io/docs/agent/http.html][4]
-[http://www.consul.io/docs/agent/dns.html][5]
+* [http://www.consul.io/docs/guides/external.html][2]
+* [http://www.consul.io/intro/getting-started/kv.html][3]
+* [http://www.consul.io/docs/agent/http.html][4]
+* [http://www.consul.io/docs/agent/dns.html][5]
+
 #### Register a new service with the HTTP API
 
 ```sh
