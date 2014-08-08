@@ -13,7 +13,8 @@ consul =
     "json": {
       "consul": {
         "datacenter": "vagrant-dc",
-        "bind_interface": "eth1"
+        "bind_interface": "eth1",
+        "client_interface": "eth1"
       }
     }
   }'
